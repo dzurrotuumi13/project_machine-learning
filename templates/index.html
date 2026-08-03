@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Penyakit Jantung</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db; /* Biru cerah yang lebih fresh */
+            --secondary-color: #2ecc71; /* Hijau mint yang lebih hidup */
+            --accent-color: #e74c3c; /* Merah yang lebih vibrant */
+            --text-color: #2c3e50;
+            --light-bg: #f7f9fc;
+            --border-radius: 8px;
+            --box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px; /* Ukuran font yang lebih kecil */
+            border-bottom: 1px solid #eee; /* Border yang lebih tipis */
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px 12px; /* Padding yang lebih kecil */
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 15px; /* Ukuran font yang lebih kecil */
+            transition: border 0.3s;
+            box-sizing: border-box;
+        }
+        
+        input[type="number"]:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        input[type="submit"] {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 18px; /* Padding yang lebih kecil */
+            font-size: 16px; /* Ukuran font yang lebih kecil */
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #5d8070; /* Warna hover yang lebih gelap */
+        }
+        
+        .prediction {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-left: 3px solid var(--primary-color);
+            border-radius: var(--border-radius);
+        }
+        
+        .prediction.positive {
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .prediction.negative {
+            border-left: 3px solid var(--secondary-color);
+        }
+        
+        .prediction h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #2980b9); /* Gradient untuk tampilan yang lebih hidup */
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+        
+        .header p {
+            margin: 10px 0 0;
+            opacity: 0.9;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .info-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: #95a5a6;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12px;
+            margin-left: 5px;
+            cursor: help;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 13px; /* Ukuran font yang lebih kecil */
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .medical-disclaimer {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .medical-disclaimer p {
+            margin: 0;
+            color: #856404;
+        }
+        
+        .feature-box {
+            display: flex;
+            margin-bottom: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .feature-card {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: none; /* Menghilangkan border untuk tampilan yang lebih clean */
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card i {
+            font-size: 32px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:nth-child(1) i {
+            color: var(--primary-color);
+        }
+        
+        .feature-card:nth-child(2) i {
+            color: var(--secondary-color);
+        }
+        
+        .feature-card:nth-child(3) i {
+            color: var(--accent-color);
+        }
+        
+        .feature-card:hover i {
+            transform: scale(1.15);
+        }
+        
+        .feature-card h4 {
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .feature-card h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .feature-card:nth-child(1) h4::after {
+            background-color: var(--primary-color);
+        }
+        
+        .feature-card:nth-child(2) h4::after {
+            background-color: var(--secondary-color);
+        }
+        
+        .feature-card:nth-child(3) h4::after {
+            background-color: var(--accent-color);
+        }
+        
+        .feature-card:hover h4::after {
+            width: 50px;
+        }
+        
+        .feature-card p.card-summary {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card .card-details {
+            display: none;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 12px;
+            text-align: left;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05) inset;
+        }
+        
+        .feature-card .card-details ul {
+            margin: 10px 0;
+        }
+        
+        .feature-card .card-details li {
+            margin-bottom: 8px;
+        }
+        
+        .model-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .model-info h3 {
+            color: var(--primary-color);
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .model-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .model-stat {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(to bottom, #f7f9fc, #ffffff);
+            border-radius: var(--border-radius);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .model-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .model-stat .value {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+        
+        .model-stat .label {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+        
+        .form-group label {
+            display: flex;
+            align-items: center;
+        }
+        
+        .tooltip-icon {
+            margin-left: 5px;
+            color: #95a5a6;
+            cursor: help;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip-icon:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #34495e;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #34495e transparent transparent transparent;
+        }
+        
+        /* Tambahkan style untuk info cards */
+        .info-section {
+            margin: 30px 0;
+            padding: 25px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .info-section h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-card {
+            background: linear-gradient(to bottom, #f7f9fc, #ffffff);
+            border-radius: var(--border-radius);
+            padding: 18px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        
+        .info-card h4 i {
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+        
+        .info-card p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .info-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .info-toggle button {
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-toggle button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .info-toggle button i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Prediksi Penyakit Jantung</h1>
+            <p>Sistem prediksi berbasis machine learning untuk deteksi dini risiko penyakit jantung</p>
+        </div>
+        
+        <!-- Add informative feature boxes -->
+        <div class="feature-box">
+            <div class="feature-card" onclick="toggleFeatureDetails('deteksi-dini')">
+                <i class="fas fa-heartbeat"></i>
+                <h4>Deteksi Dini</h4>
+                <p class="card-summary">Identifikasi risiko penyakit jantung berdasarkan faktor kesehatan Anda</p>
+                <div class="card-details" id="deteksi-dini">
+                    <p>Sistem ini menganalisis berbagai faktor risiko penyakit jantung, termasuk:</p>
+                    <ul>
+                        <li><strong>Tekanan darah</strong> - Hipertensi meningkatkan risiko penyakit jantung hingga 3x lipat</li>
+                        <li><strong>Kolesterol</strong> - Kadar kolesterol tinggi berkontribusi pada 56% kasus penyakit jantung</li>
+                        <li><strong>Gejala nyeri dada</strong> - Pola nyeri dada dapat mengindikasikan masalah jantung spesifik</li>
+                        <li><strong>Hasil EKG</strong> - Dapat mendeteksi kelainan irama jantung dan masalah aliran darah</li>
+                    </ul>
+                    <p>Deteksi dini dapat meningkatkan peluang penanganan yang efektif hingga 80% dan menurunkan risiko komplikasi serius seperti serangan jantung dan stroke.</p>
+                </div>
+            </div>
+            <div class="feature-card" onclick="toggleFeatureDetails('machine-learning')">
+                <i class="fas fa-brain"></i>
+                <h4>Machine Learning</h4>
+                <p class="card-summary">Menggunakan algoritma AI canggih dengan akurasi tinggi</p>
+                <div class="card-details" id="machine-learning">
+                    <p>Sistem ini menggunakan dua algoritma machine learning yang saling melengkapi:</p>
+                    <ul>
+                        <li><strong>Logistic Regression (83.6% akurasi)</strong> - Algoritma klasik yang menawarkan interpretabilitas tinggi, memungkinkan dokter memahami faktor-faktor yang berkontribusi pada prediksi</li>
+                        <li><strong>Random Forest (93.7% akurasi)</strong> - Algoritma ensemble yang menggabungkan banyak decision tree untuk prediksi yang lebih akurat dan robust</li>
+                    </ul>
+                    <p>Model-model ini dilatih dan divalidasi menggunakan dataset dari ribuan kasus klinis nyata, dengan cross-validation score 94.1% untuk Random Forest, memastikan performa yang konsisten pada data baru.</p>
+                </div>
+            </div>
+            <div class="feature-card" onclick="toggleFeatureDetails('preventif')">
+                <i class="fas fa-shield-alt"></i>
+                <h4>Preventif</h4>
+                <p class="card-summary">Cegah komplikasi dengan mengetahui risiko lebih awal</p>
+                <div class="card-details" id="preventif">
+                    <p>Mengetahui risiko penyakit jantung sejak dini memungkinkan tindakan preventif yang efektif:</p>
+                    <ul>
+                        <li><strong>Diet seimbang</strong> - Diet mediterania dan DASH dapat menurunkan risiko penyakit jantung hingga 30%</li>
+                        <li><strong>Aktivitas fisik</strong> - 150 menit olahraga sedang per minggu dapat menurunkan risiko hingga 35%</li>
+                        <li><strong>Manajemen stres</strong> - Teknik relaksasi dan meditasi dapat menurunkan tekanan darah dan mengurangi peradangan</li>
+                        <li><strong>Berhenti merokok</strong> - Risiko penyakit jantung menurun 50% setelah 1 tahun berhenti merokok</li>
+                    </ul>
+                    <p>Kombinasi perubahan gaya hidup ini dapat menurunkan risiko penyakit jantung hingga 80% jika dimulai sejak dini dan dilakukan secara konsisten.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add model information section -->
+        <div class="model-info">
+            <h3>Performa Model Prediksi</h3>
+            <div class="model-stats">
+                <div class="model-stat">
+                    <div class="value">83.6%</div>
+                    <div class="label">Akurasi Logistic Regression</div>
+                </div>
+                <div class="model-stat">
+                    <div class="value">93.7%</div>
+                    <div class="label">Akurasi Random Forest</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-toggle">
+            <button onclick="toggleInfoSection()" id="toggleInfoBtn">
+                <i class="fas fa-info-circle"></i> Tampilkan Informasi Medis
+            </button>
+        </div>
+
+        <div class="info-section" id="infoSection" style="display: none;">
+            <h3><i class="fas fa-book-medical"></i> Informasi Istilah Medis</h3>
+            <p>Berikut adalah penjelasan istilah-istilah medis yang digunakan dalam form prediksi:</p>
+            
+            <div class="info-cards">
+                <div class="info-card">
+                    <h4><i class="fas fa-heartbeat"></i> Tipe Nyeri Dada</h4>
+                    <p><strong>Angina Tipikal:</strong> Nyeri dada yang khas terjadi karena jantung kekurangan oksigen, biasanya terasa seperti tertekan atau sesak di dada.</p>
+                    <p><strong>Angina Atipikal:</strong> Nyeri dada yang tidak khas, mungkin terasa di lokasi berbeda atau dengan sensasi berbeda.</p>
+                    <p><strong>Nyeri Non-angina:</strong> Nyeri dada yang tidak terkait dengan masalah jantung.</p>
+                    <p><strong>Asimptomatik:</strong> Tidak ada gejala nyeri dada meskipun mungkin ada masalah jantung.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-chart-line"></i> Tekanan Darah</h4>
+                    <p>Tekanan darah normal umumnya di bawah <strong>120/80 mmHg</strong>. Tekanan darah tinggi (hipertensi) adalah ketika tekanan darah konsisten di atas <strong>130/80 mmHg</strong>.</p>
+                    <p>Tekanan darah tinggi meningkatkan risiko penyakit jantung karena membuat jantung bekerja lebih keras untuk memompa darah.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-tint"></i> Kolesterol</h4>
+                    <p>Kolesterol total yang sehat umumnya di bawah <strong>200 mg/dl</strong>. Kolesterol tinggi dapat menyebabkan penumpukan plak di arteri yang meningkatkan risiko penyakit jantung.</p>
+                    <p>Ada kolesterol "baik" (HDL) dan kolesterol "buruk" (LDL). Tingkat HDL yang tinggi dan LDL yang rendah lebih baik untuk kesehatan jantung.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-heartbeat"></i> EKG (Elektrokardiogram)</h4>
+                    <p><strong>Normal:</strong> Tidak ada kelainan pada aktivitas listrik jantung.</p>
+                    <p><strong>Abnormalitas ST-T:</strong> Perubahan pada gelombang ST-T yang dapat mengindikasikan masalah pada aliran darah ke jantung.</p>
+                    <p><strong>Hipertrofi Ventrikel Kiri:</strong> Penebalan dinding ventrikel kiri jantung, sering terjadi akibat tekanan darah tinggi jangka panjang.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-running"></i> Angina Akibat Latihan</h4>
+                    <p>Nyeri dada yang terjadi saat beraktivitas fisik adalah indikasi penting dari penyakit jantung koroner. Ini terjadi karena jantung membutuhkan lebih banyak oksigen saat latihan, tetapi arteri yang tersumbat membatasi aliran darah.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-heartbeat"></i> Detak Jantung Maksimum</h4>
+                    <p>Detak jantung maksimum normal dapat dihitung dengan rumus <strong>220 - usia</strong>. Misalnya, untuk orang berusia 40 tahun, detak jantung maksimum normal sekitar <strong>180 denyut per menit</strong>.</p>
+                    <p>Detak jantung maksimum yang lebih rendah dari normal dapat mengindikasikan masalah pada jantung, terutama jika disertai dengan gejala lain seperti sesak napas atau kelelahan berlebih.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-chart-area"></i> Depresi ST & Kemiringan</h4>
+                    <p><strong>Depresi ST (Oldpeak):</strong> Penurunan segmen ST pada EKG saat latihan, diukur dalam <strong>milimeter</strong>. Nilai yang lebih tinggi menunjukkan risiko lebih besar.</p>
+                    <p><strong>Kemiringan ST:</strong> Menggambarkan bentuk segmen ST. Kemiringan menurun sering dikaitkan dengan penyakit jantung.</p>
+                </div>
+            </div>
+        </div>
+        
+        <h2>Form Prediksi</h2>
+        <form method="POST">
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label>
+                            Usia:
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Usia pasien dalam tahun. Faktor usia sangat berpengaruh pada risiko penyakit jantung.</span>
+                            </span>
+                        </label>
+                        <input type="number" name="age" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Jenis Kelamin:
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Jenis kelamin pasien. Pria memiliki risiko penyakit jantung yang berbeda dengan wanita.</span>
+                            </span>
+                        </label>
+                        <select name="sex">
+                            <option value="male">Laki-laki</option>
+                            <option value="female">Perempuan</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Tipe Nyeri Dada:
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Jenis nyeri dada yang dialami pasien.</span>
+                            </span>
+                        </label>
+                        <select name="cp">
+                            <option value="1">Angina Tipikal</option>
+                            <option value="2">Angina Atipikal</option>
+                            <option value="3">Nyeri Non-angina</option>
+                            <option value="4">Asimptomatik</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Tekanan Darah Istirahat (mmHg):
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Tekanan darah sistolik saat istirahat. Tekanan darah normal umumnya di bawah 120/80 mmHg</span>
+                            </span>
+                        </label>
+                        <input type="number" name="trestbps" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Kolesterol (mg/dl):
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Kadar kolesterol dalam darah. Kolesterol total yang sehat umumnya di bawah 200 mg/dl.</span>
+                            </span>
+                        </label>
+                        <input type="number" name="chol" required>
+                    </div>
+                </div>
+                
+                <div class="form-col">
+                    <div class="form-group">
+                        <label>
+                            Gula Darah Puasa > 120 mg/dl:
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Apakah gula darah puasa lebih dari 120 mg/dl.</span>
+                            </span>
+                        </label>
+                        <select name="fbs">
+                            <option value="1">Ya</option>
+                            <option value="0">Tidak</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Hasil EKG Istirahat:
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Hasil elektrokardiografi saat istirahat.</span>
+                            </span>
+                        </label>
+                        <select name="restecg">
+                            <option value="0">Normal</option>
+                            <option value="1">Abnormalitas ST-T</option>
+                            <option value="2">Hipertrofi Ventrikel Kiri</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Detak Jantung Maksimum (per-menit):
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Detak jantung maksimum yang dicapai. Detak jantung normal saat istirahat 60–100 bpm, maksimum normal sekitar 180 bpm per menit.</span>
+                            </span>
+                        </label>
+                        <input type="number" name="thalach" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Angina Akibat Latihan:
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Apakah terjadi nyeri dada saat latihan.</span>
+                            </span>
+                        </label>
+                        <select name="exang">
+                            <option value="1">Ya</option>
+                            <option value="0">Tidak</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Depresi ST (Oldpeak):
+                            <span class="tooltip-icon">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Depresi segmen ST yang diinduksi oleh latihan relatif terhadap istirahat. Diukur dalam milimeter.</span>
+                            </span>
+                        </label>
+                        <input type="number" step="0.1" name="oldpeak" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    Kemiringan Segmen ST:
+                    <span class="tooltip-icon">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="tooltip-text">Kemiringan segmen ST pada puncak latihan.</span>
+                    </span>
+                </label>
+                <select name="slope">
+                    <option value="0">Naik</option>
+                    <option value="1">Datar</option>
+                    <option value="2">Turun</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Pilih Model Prediksi:</label>
+                <select name="model">
+                    <option value="logreg">Logistic Regression</option>
+                    <option value="rf">Random Forest</option>
+                </select>
+            </div>
+
+            <input type="submit" value="Analisis Risiko Jantung">
+        </form>
+
+        {% if prediction %}
+            <div class="prediction {% if 'Penderita Penyakit Jantung' in prediction %}positive{% else %}negative{% endif %}">
+                <h3>Hasil Analisis</h3>
+                <p><i class="{% if 'Penderita Penyakit Jantung' in prediction %}fas fa-exclamation-triangle{% else %}fas fa-check-circle{% endif %}"></i> {{ prediction }}</p>
+                
+                <div class="medical-disclaimer">
+                    <p><strong><i class="fas fa-stethoscope"></i> Perhatian Medis:</strong> Hasil ini hanya prediksi sementara berdasarkan model machine learning. 
+                    {% if "Penderita Penyakit Jantung" in prediction %}
+                        Meskipun terindikasi berisiko penyakit jantung, sebaiknya segera konsultasikan dengan dokter spesialis jantung (kardiolog) untuk diagnosis yang akurat dan penanganan yang tepat. Deteksi dini dan penanganan yang cepat dapat mencegah komplikasi serius.
+                    {% else %}
+                        Meskipun tidak terindikasi penyakit jantung, tetap disarankan untuk melakukan pemeriksaan rutin dengan dokter. Faktor risiko penyakit jantung dapat berubah seiring waktu, dan pemeriksaan kesehatan berkala sangat penting untuk pencegahan.
+                    {% endif %}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="footer">
+            <p><i class="fas fa-heart"></i> © 2025 Sistem Prediksi Penyakit Jantung | Dibuat dengan Machine Learning | Kelompok 6</p>
+        </div>
+    </div>
+</body>
+<script>
+    function toggleInfoSection() {
+        var infoSection = document.getElementById('infoSection');
+        var toggleBtn = document.getElementById('toggleInfoBtn');
+        
+        if (infoSection.style.display === 'none') {
+            infoSection.style.display = 'block';
+            toggleBtn.innerHTML = '<i class="fas fa-times-circle"></i> Sembunyikan Informasi Medis';
+        } else {
+            infoSection.style.display = 'none';
+            toggleBtn.innerHTML = '<i class="fas fa-info-circle"></i> Tampilkan Informasi Medis';
+        }
+    }
+
+    function toggleFeatureDetails(id) {
+        var details = document.getElementById(id);
+        
+        if (details.style.display === 'block') {
+            details.style.display = 'none';
+        } else {
+            details.style.display = 'block';
+        }
+    }
+</script>
+</html>

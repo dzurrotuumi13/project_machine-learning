@@ -1,0 +1,24 @@
+===== Logistic Regression Evaluation =====
+Accuracy: 0.8403
+Confusion Matrix:
+[[ 92  20]
+ [ 18 108]]
+             precision  recall f1-score  support
+0               83.64%  82.14%   82.88%      112
+1               84.38%  85.71%   85.04%      126
+accuracy        84.03%  84.03%   84.03%        0
+macro avg       84.01%  83.93%   83.96%      238
+weighted avg    84.03%  84.03%   84.02%      238
+
+===== Random Forest Evaluation =====
+Accuracy: 0.9370
+Confusion Matrix:
+[[106   6]
+ [  9 117]]
+             precision  recall f1-score  support
+0               92.17%  94.64%   93.39%      112
+1               95.12%  92.86%   93.98%      126
+accuracy        93.70%  93.70%   93.70%        0
+macro avg       93.65%  93.75%   93.68%      238
+weighted avg    93.73%  93.70%   93.70%      238
+
